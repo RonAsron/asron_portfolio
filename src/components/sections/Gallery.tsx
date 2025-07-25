@@ -12,7 +12,9 @@ const Gallery: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>({});
+  const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>(
+    {}
+  );
   const [error, setError] = useState<string | null>(null);
   const [isInteracting, setIsInteracting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -28,7 +30,7 @@ const Gallery: React.FC = () => {
   const getPublicImageUrl = useCallback((filename: string): string => {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     // ตรงนี้แก้ให้ path ถูกต้อง (ไม่ต้องมี public/ ซ้ำ)
-    return `${supabaseUrl}/storage/v1/object/images/public/${filename}`;
+    return `${supabaseUrl}/storage/v1/object/public/images/public/${filename}`;
   }, []);
 
   const fetchImagesFromSupabase = useCallback(async () => {
@@ -53,7 +55,9 @@ const Gallery: React.FC = () => {
         .filter((file) => file.name.match(/\.(jpg|jpeg|png|webp)$/i))
         .map((file) => ({
           id: file.id || file.name,
-          alt: `รูปภาพแกลเลอรี่: ${file.name.split(".")[0].replace(/[-_]/g, " ")}`,
+          alt: `รูปภาพแกลเลอรี่: ${file.name
+            .split(".")[0]
+            .replace(/[-_]/g, " ")}`,
           url: getPublicImageUrl(file.name), // ถูกต้อง
         }));
 

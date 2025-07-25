@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { NAVIGATION_LINKS, SCROLL_OFFSET } from "../../utils/constants";
 import { personalInfo } from "../../data/personal";
@@ -8,7 +8,7 @@ import ThemeToggle from "../ui/ThemeToggleButton";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+const navRef = useRef<HTMLElement | null>(null);
   // Use the custom scroll spy hook for active section detection
   const sectionIds = NAVIGATION_LINKS.map((link) => link.id);
   const activeSection = useScrollSpy(sectionIds, {
@@ -22,17 +22,19 @@ const Header: React.FC = () => {
   };
 
   // Close mobile menu when clicking outside
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (isMenuOpen && !target.closest("nav")) {
+      if (
+        isMenuOpen &&
+        navRef.current &&
+        !navRef.current.contains(event.target as Node)
+      ) {
         closeMobileMenu();
       }
     };
 
     if (isMenuOpen) {
       document.addEventListener("click", handleClickOutside);
-      // Prevent body scroll when menu is open
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -51,8 +53,8 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-background/90 dark:bg-dark-background/90 backdrop-blur-sm border-b border-gray-200 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header  className="fixed top-0 left-0 right-0 bg-background/90 dark:bg-dark-background/90 backdrop-blur-sm border-b border-gray-200 z-50">
+      <nav ref={navRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
           {/* Theme Toggle Button */}

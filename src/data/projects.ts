@@ -12,14 +12,14 @@ export interface Project {
 // Sample project data
 export const projects: Project[] = [
   {
-    id: '1',
-    title: 'E-Commerce Platform',
-    description: 'A full-stack e-commerce platform built with React, Node.js, and PostgreSQL. Features include user authentication, product catalog, shopping cart, and payment integration.',
-    technologies: ['React', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Stripe API'],
-    imageUrl: '/images/projects/ecommerce-platform.jpg',
-    liveUrl: 'https://ecommerce-demo.example.com',
-    githubUrl: 'https://github.com/johndoe/ecommerce-platform',
-    featured: true,
+  id: '1',
+  title: 'Asron Portfolio',
+  description: 'A modern personal portfolio website built with React and TypeScript. It showcases my skills, projects, and contact information. Features include responsive design, dark mode toggle, animated sections, and integration with Supabase for data handling.',
+  technologies: ['React', 'TypeScript', 'Supabase', 'Firebase Hosting'],
+  imageUrl: 'https://urtihtjsdumqtibnrkkh.supabase.co/storage/v1/object/public/avatars//Asron_Portfolio.png',
+  liveUrl: 'https://labsreon.web.app/',
+  githubUrl: 'https://github.com/RonAsron/asron_portfolio.git',
+  featured: true,
   },
   {
     id: '2',

@@ -77,7 +77,7 @@ const ProjectCard = React.memo(({ project, index = 0 }: ProjectCardProps) => {
             {project.technologies.map((tech, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-cardbg text-cardtext dark:text-dark-cardtext dark:bg-dark-cardbg text-sm rounded-full"
+                className="px-3 py-1 bg-cardbg text-cardtext dark:text-dark-cardtext dark:bg-dark-foregroundlight/10 text-sm rounded-full"
               >
                 {tech}
               </span>
@@ -101,7 +101,7 @@ const ProjectCard = React.memo(({ project, index = 0 }: ProjectCardProps) => {
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex-1 border-2 border-gray-300 text-gray-700 text-center py-3 px-4 rounded-lg hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 transition-colors duration-200 font-medium touch-manipulation min-h-[44px] flex items-center justify-center ${
+            className={`flex-1 border-2 border-gray-300 text-cardtext dark:text-dark-cardtext/50 text-center py-3 px-4 rounded-lg hover:border-gray-400 hover:bg-cardbg dark:bg-cardtext active:bg-gray-100 transition-colors duration-200 font-medium touch-manipulation min-h-[44px] flex items-center justify-center ${
               !project.liveUrl
                 ? "bg-gray-900 text-white hover:bg-gray-800 active:bg-gray-700 border-gray-900"
                 : ""

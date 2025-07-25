@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from "react";
 
 interface UseScrollSpyOptions {
-  offset?: number
-  throttleMs?: number
+  offset?: number;
+  throttleMs?: number;
 }
 
 /**
@@ -13,62 +13,59 @@ export const useScrollSpy = (
   sectionIds: string[],
   options: UseScrollSpyOptions = {}
 ) => {
-  const { offset = 100, throttleMs = 100 } = options
-  const [activeSection, setActiveSection] = useState<string>(sectionIds[0] || '')
+  const { offset = 100, throttleMs = 100 } = options;
+  const [activeSection, setActiveSection] = useState<string>(
+    sectionIds[0] || ""
+  );
 
   const handleScroll = useCallback(() => {
-    const scrollPosition = window.scrollY + offset
+    const scrollPosition = window.scrollY + offset;
 
-    // Find the section that is currently in view
     for (let i = sectionIds.length - 1; i >= 0; i--) {
-      const sectionId = sectionIds[i]
-      const element = document.getElementById(sectionId)
-      
-      if (element) {
-        const sectionTop = element.offsetTop
-        const sectionHeight = element.offsetHeight
-        const sectionBottom = sectionTop + sectionHeight
+      const sectionId = sectionIds[i];
+      const element = document.getElementById(sectionId);
 
-        // Check if the scroll position is within this section
+      if (element) {
+        const sectionTop = element.offsetTop;
+        const sectionHeight = element.offsetHeight;
+        const sectionBottom = sectionTop + sectionHeight;
+
         if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-          setActiveSection(sectionId)
-          break
+          setActiveSection(sectionId);
+          break;
         }
-        
-        // Special case for the last section - if we're past all sections, 
-        // make sure the last one is active
+
         if (i === sectionIds.length - 1 && scrollPosition >= sectionTop) {
-          setActiveSection(sectionId)
-          break
+          setActiveSection(sectionId);
+          break;
         }
       }
     }
-  }, [sectionIds, offset])
+  }, [sectionIds, offset]);
 
-  // Throttle scroll events for better performance
+  // ใช้ useRef เก็บ timeout id
+  const timeoutId = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ฟังก์ชัน throttled scroll handler
   const throttledHandleScroll = useCallback(() => {
-    let timeoutId: number
-    
-    return () => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(handleScroll, throttleMs)
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
     }
-  }, [handleScroll, throttleMs])
+    timeoutId.current = setTimeout(handleScroll, throttleMs);
+  }, [handleScroll, throttleMs]);
 
   useEffect(() => {
-    const throttledScroll = throttledHandleScroll()
-    
-    // Set initial active section
-    handleScroll()
-    
-    // Add scroll event listener
-    window.addEventListener('scroll', throttledScroll, { passive: true })
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', throttledScroll)
-    }
-  }, [handleScroll, throttledHandleScroll])
+    // เรียก set ค่าครั้งแรก
+    handleScroll();
 
-  return activeSection
-}
+    // ลงทะเบียน event listener
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
+
+    // ลบ event listener ตอน cleanup
+    return () => {
+      window.removeEventListener("scroll", throttledHandleScroll);
+    };
+  }, [handleScroll, throttledHandleScroll]);
+
+  return activeSection;
+};

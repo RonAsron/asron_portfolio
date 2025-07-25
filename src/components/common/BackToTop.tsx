@@ -22,23 +22,23 @@ const BackToTop: React.FC<BackToTopProps> = ({
   }, [showAfter])
 
   // Show button when page is scrolled down
-  useEffect(() => {
-    let timeoutId: number
+useEffect(() => {
+  let timeoutId: ReturnType<typeof setTimeout>
 
-    const throttledScroll = () => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(handleScroll, 100)
-    }
+  const throttledScroll = () => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(handleScroll, 100)
+  }
 
-    // Set initial visibility
-    handleScroll()
+  handleScroll()
 
-    window.addEventListener('scroll', throttledScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', throttledScroll)
-      clearTimeout(timeoutId)
-    }
-  }, [handleScroll])
+  window.addEventListener('scroll', throttledScroll, { passive: true })
+  return () => {
+    window.removeEventListener('scroll', throttledScroll)
+    clearTimeout(timeoutId)
+  }
+}, [handleScroll])
+
 
   // Smooth scroll to top with animation feedback
   const scrollToTop = useCallback(() => {
